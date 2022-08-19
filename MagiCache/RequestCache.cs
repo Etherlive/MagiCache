@@ -19,7 +19,9 @@ namespace MagiCache
 
         private static string getKey(APIRequest request)
         {
-            return $"{request.url}-{request.method}-{request.type}-{request.data}";
+            var data = request.isPost ? request.data : String.Join('&', request.data.Split("&").Where(x => !x.StartsWith("local") && !x.StartsWith("nd")));
+
+            return $"{request.url}-{request.method}-{request.type}-{data}";
         }
 
         public static void AddToCache(APIRequest request, string response_body, int response_code)

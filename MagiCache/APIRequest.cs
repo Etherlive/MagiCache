@@ -17,13 +17,15 @@ namespace MagiCache
     {
         #region Properties
 
-        private bool isPost
+        public string cookie { get; set; }
+
+        public string data { get; set; }
+
+        public bool isPost
         {
             get { return this.method.ToUpper() == "POST"; }
         }
 
-        public string cookie { get; set; }
-        public string data { get; set; }
         public string method { get; set; }
         public string type { get; set; }
         public string url { get; set; }
