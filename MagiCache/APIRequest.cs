@@ -27,7 +27,22 @@ namespace MagiCache
 
         #region Methods
 
-        public int ExecuteAndReturnStatus(string origin, out string response)
+        public bool CheckInCache(out string response, out int status_code)
+        {
+            response = "Missed Cache";
+            status_code = 110;
+
+            var inCache = RequestCache.TryGetFromCache(this, out var cachedRequest);
+
+            if (inCache)
+            {
+                response = cachedRequest.response_body;
+                status_code = cachedRequest.response_code;
+            }
+            return inCache;
+        }
+
+        public int ExecuteRequest(string origin, out string response)
         {
             try
             {
@@ -55,6 +70,8 @@ namespace MagiCache
 
                         var res_stream = new StreamReader(res.Content.ReadAsStream());
                         var res_body = res_stream.ReadToEnd();
+
+                        RequestCache.AddToCache(this, res_body, (int)res.StatusCode);
 
                         response = res_body;
                         return (int)res.StatusCode;

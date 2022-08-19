@@ -27,6 +27,10 @@ namespace MagiCache
             var response = context.Response;
             var response_stream = new StreamWriter(response.OutputStream);
 
+            response.AppendHeader("Access-Control-Allow-Origin", "*");
+            response.AppendHeader("Access-Control-Allow-Headers", "content-type");
+            response.AppendHeader("Allow", "OPTIONS,POST");
+
             if (request.HttpMethod == "POST")
             {
                 var b_stream = new StreamReader(request.InputStream);
@@ -35,7 +39,18 @@ namespace MagiCache
                 try
                 {
                     var apiReq = JsonSerializer.Deserialize<APIRequest>(body);
-                    response.StatusCode = apiReq.ExecuteAndReturnStatus(request.Headers["Origin"], out string res_body);
+
+                    string res_body;
+                    if (apiReq.CheckInCache(out res_body, out int status_code))
+                    {
+                        response.StatusCode = status_code;
+                        response.AppendHeader("cache-hit", "true");
+                    }
+                    else
+                    {
+                        response.StatusCode = apiReq.ExecuteRequest(request.Headers["Origin"], out res_body);
+                        response.AppendHeader("cache-hit", "false");
+                    }
                     response_stream.Write(res_body);
                 }
                 catch (JsonException e)
@@ -51,9 +66,7 @@ namespace MagiCache
             }
             else if (request.HttpMethod == "OPTIONS")
             {
-                response.AddHeader("Access-Control-Allow-Headers", "content-type");
-                response.AddHeader("Access-Control-Allow-Origin", "*");
-                response.AddHeader("Allow", "OPTIONS,POST");
+                response_stream.Write("Options Returned");
             }
             else
             {
@@ -61,8 +74,8 @@ namespace MagiCache
                 response_stream.Write("Method Not Permitted");
             }
 
-            response.OutputStream.Flush();
-            response.OutputStream.Close();
+            response_stream.Flush();
+            response_stream.Close();
             response.Close();
         }
 
