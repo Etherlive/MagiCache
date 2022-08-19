@@ -17,6 +17,11 @@ namespace MagiCache
     {
         #region Properties
 
+        private bool isPost
+        {
+            get { return this.method.ToUpper() == "POST"; }
+        }
+
         public string cookie { get; set; }
         public string data { get; set; }
         public string method { get; set; }
@@ -58,13 +63,18 @@ namespace MagiCache
                         handler.CookieContainer.Add(new System.Net.Cookie(cook_seg[0], cook_seg[1], "/", trimmedOrigin));
                     }
 
+                    var wholeURL = this.isPost ? this.url : this.url + "?" + this.data;
+
                     using (var cli = new HttpClient(handler))
                     {
-                        var req = new HttpRequestMessage(this.method.ToUpper() == "POST" ? HttpMethod.Post : HttpMethod.Get, origin + "/" + this.url);
+                        var req = new HttpRequestMessage(HttpMethod.Post, origin + wholeURL);
 
                         req.Headers.Add("origin", origin);
 
-                        req.Content = new StringContent(this.data, Encoding.UTF8, this.type.Split(";")[0]);
+                        if (isPost)
+                        {
+                            req.Content = new StringContent(this.data, Encoding.UTF8, this.type.Split(";")[0]);
+                        }
 
                         var res = cli.Send(req);
 
