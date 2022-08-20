@@ -18,14 +18,7 @@ namespace MagiCache
 
         #region Methods
 
-        public static void Log(APIRequest request, int statusCode)
-        {
-            var s = $"{request.pathedUrl} - {request.method} - {request.type} - {statusCode} - {DateTime.Now.ToString()}";
-            _logs.Enqueue(s);
-            Console.WriteLine(s);
-        }
-
-        public static void OutputLog()
+        public static string[] GetLog()
         {
             List<string> logs = new List<string>();
 
@@ -38,6 +31,15 @@ namespace MagiCache
             {
                 File.AppendAllLines($"{initDate.ToString().Replace("/", "-").Replace(":", "-")}.log", logs);
             }
+
+            return logs.ToArray();
+        }
+
+        public static void Log(APIRequest request, int statusCode)
+        {
+            var s = $"{request.pathedUrl} - {request.method} - {request.type} - {statusCode} - {DateTime.Now.ToString()}";
+            _logs.Enqueue(s);
+            Console.WriteLine(s);
         }
 
         #endregion Methods
