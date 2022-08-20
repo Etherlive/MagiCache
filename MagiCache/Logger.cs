@@ -36,9 +36,9 @@ namespace MagiCache
             return logs.ToArray();
         }
 
-        public static void Log(APIRequest request, int statusCode, string res_body)
+        public static void Log(APIRequest request, int statusCode, string res_body, bool cache_hit)
         {
-            var s = $"{request.pathedUrl} - {request.method} - {request.type} - {statusCode} - {DateTime.Now.ToString()}\r\n{request.data}";
+            var s = $"{request.pathedUrl} - {request.method} - {request.type} - {statusCode} - {DateTime.Now.ToString()} - {(cache_hit ? "cache-hit" : "cache-miss")}\r\n{request.data}";
             _logs.Enqueue(s);
             Console.WriteLine(s);
         }

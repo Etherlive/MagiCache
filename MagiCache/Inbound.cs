@@ -29,7 +29,8 @@ namespace MagiCache
                 var apiReq = JsonSerializer.Deserialize<APIRequest>(body);
 
                 string res_body;
-                if (apiReq.CheckInCache(out res_body, out int status_code))
+                bool cache_hit = apiReq.CheckInCache(out res_body, out int status_code);
+                if (cache_hit)
                 {
                     response.StatusCode = status_code;
                     response.AppendHeader("cache-hit", "true");
@@ -41,7 +42,7 @@ namespace MagiCache
                 }
                 response_stream.Write(res_body);
 
-                Logger.Log(apiReq, response.StatusCode, res_body);
+                Logger.Log(apiReq, response.StatusCode, res_body, cache_hit);
             }
             catch (JsonException e)
             {
