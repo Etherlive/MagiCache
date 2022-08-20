@@ -52,6 +52,8 @@ namespace MagiCache
                         response.AppendHeader("cache-hit", "false");
                     }
                     response_stream.Write(res_body);
+
+                    Logger.Log(apiReq, response.StatusCode);
                 }
                 catch (JsonException e)
                 {

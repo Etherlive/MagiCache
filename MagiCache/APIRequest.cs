@@ -67,9 +67,18 @@ namespace MagiCache
 
                     var wholeURL = this.isPost ? this.url : this.url + "?" + this.data;
 
+                    if (wholeURL.StartsWith("/") || origin.EndsWith("/"))
+                    {
+                        wholeURL = origin + wholeURL;
+                    }
+                    else
+                    {
+                        wholeURL = origin + "/" + wholeURL;
+                    }
+
                     using (var cli = new HttpClient(handler))
                     {
-                        var req = new HttpRequestMessage(HttpMethod.Post, origin + wholeURL);
+                        var req = new HttpRequestMessage(HttpMethod.Post, wholeURL);
 
                         req.Headers.Add("origin", origin);
 

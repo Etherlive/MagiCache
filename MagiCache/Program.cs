@@ -14,8 +14,11 @@ namespace MyApp // Note: actual namespace depends on the project name.
 
             while (true)
             {
-                Console.ReadLine();
+                System.Threading.Thread.Sleep(10000);
+                Logger.OutputLog();
             }
+
+            Console.ReadLine();
         }
 
         #endregion Methods
