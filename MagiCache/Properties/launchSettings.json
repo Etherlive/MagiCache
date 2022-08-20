@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "MagiCache": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
