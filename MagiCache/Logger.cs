@@ -20,7 +20,7 @@ namespace MagiCache
 
         public static void Log(APIRequest request, int statusCode)
         {
-            _logs.Enqueue($"{request.url} - {request.method} - {request.type} - {statusCode} - {DateTime.Now.ToString()}");
+            _logs.Enqueue($"{request.pathedUrl} - {request.method} - {request.type} - {statusCode} - {DateTime.Now.ToString()}");
         }
 
         public static void OutputLog()

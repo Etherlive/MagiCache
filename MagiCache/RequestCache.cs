@@ -13,15 +13,24 @@ namespace MagiCache
         private static ConcurrentDictionary<string, CachedRequest> _cache = new ConcurrentDictionary<string, CachedRequest>();
         private static double cacheForMinutes = 5;
 
+        private static string[] passthroughUrls = new string[] { "save", "check_websocket_running", "check" };
+
         #endregion Fields
 
         #region Methods
+
+        private static bool CheckForPassthroughRequirement(APIRequest request)
+        {
+            if (passthroughUrls.Any(x => request.url.Contains(x))) return true;
+
+            return false;
+        }
 
         private static string getKey(APIRequest request)
         {
             var data = request.isPost ? request.data : String.Join('&', request.data.Split("&").Where(x => !x.StartsWith("local") && !x.StartsWith("nd")));
 
-            return $"{request.url}-{request.method}-{request.type}-{data}";
+            return $"{request.pathedUrl}-{request.method}-{request.type}-{data}";
         }
 
         public static void AddToCache(APIRequest request, string response_body, int response_code)
@@ -41,6 +50,10 @@ namespace MagiCache
 
         public static bool TryGetFromCache(APIRequest request, out CachedRequest cachedRequest)
         {
+            cachedRequest = null;
+
+            if (CheckForPassthroughRequirement(request)) return false;
+
             var key = getKey(request);
 
             var inCache = _cache.TryGetValue(key, out cachedRequest);

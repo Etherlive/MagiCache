@@ -27,6 +27,26 @@ namespace MagiCache
         }
 
         public string method { get; set; }
+        public string originPage { get; set; }
+
+        public string pathedUrl
+        {
+            get
+            {
+                if (url.Contains("/")) return url;
+                else if (originPage.Contains("."))
+                {
+                    var o_seg = originPage.Split("/");
+                    var o = String.Join("/", o_seg.Take(o_seg.Length - 1));
+                    return o + "/" + url;
+                }
+                else
+                {
+                    return originPage + url;
+                }
+            }
+        }
+
         public string type { get; set; }
         public string url { get; set; }
 
@@ -65,7 +85,7 @@ namespace MagiCache
                         handler.CookieContainer.Add(new System.Net.Cookie(cook_seg[0], cook_seg[1], "/", trimmedOrigin));
                     }
 
-                    var wholeURL = this.isPost ? this.url : this.url + "?" + this.data;
+                    var wholeURL = this.isPost ? this.pathedUrl : this.pathedUrl + "?" + this.data;
 
                     if (wholeURL.StartsWith("/") || origin.EndsWith("/"))
                     {
