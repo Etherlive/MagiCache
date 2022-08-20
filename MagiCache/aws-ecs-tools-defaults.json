@@ -20,7 +20,7 @@
     "container-port-mapping"    : "80:80",
     "container-environment-variables" : "",
     "skip-image-push"                 : false,
-    "cluster-service"                 : "MagiCache",
+    "cluster-service"                 : "magicache/MagiCache",
     "desired-count"                   : 1,
     "deployment-minimum-healthy-percent" : 50,
     "deployment-maximum-percent"         : 200,
