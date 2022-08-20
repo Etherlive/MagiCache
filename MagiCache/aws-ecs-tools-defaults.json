@@ -5,7 +5,7 @@
     "configuration" : "Release",
     "image-tag"     : "magicache:latest",
     "docker-build-working-dir" : "",
-    "cluster"                  : "synchronizer",
+    "cluster"                  : "magicache",
     "launch-type"              : "FARGATE",
     "launch-subnets"           : "subnet-891312fd,subnet-d7103191,subnet-43e00426",
     "launch-security-groups"   : "sg-8133d4e4",
@@ -17,12 +17,14 @@
     "task-definition-task-role" : "arn:aws:iam::340058290543:role/ecsTaskExecutionRole",
     "task-execution-role"       : "ecsTaskExecutionRole",
     "container-name"            : "MagiCache",
-    "container-port-mapping"    : "",
+    "container-port-mapping"    : "80:80",
     "container-environment-variables" : "",
     "skip-image-push"                 : false,
     "cluster-service"                 : "MagiCache",
     "desired-count"                   : 1,
     "deployment-minimum-healthy-percent" : 50,
     "deployment-maximum-percent"         : 200,
-    "vstoolkit-deployment-mode"          : "DeployService"
+    "vstoolkit-deployment-mode"          : "DeployService",
+    "elb-target-group"                   : "arn:aws:elasticloadbalancing:eu-west-1:340058290543:targetgroup/MagiCache-1/313737c4c25d4cb5",
+    "elb-container-port"                 : 80
 }
