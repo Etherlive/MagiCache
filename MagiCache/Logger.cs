@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,9 +36,9 @@ namespace MagiCache
             return logs.ToArray();
         }
 
-        public static void Log(APIRequest request, int statusCode)
+        public static void Log(APIRequest request, int statusCode, string res_body)
         {
-            var s = $"{request.pathedUrl} - {request.method} - {request.type} - {statusCode} - {DateTime.Now.ToString()}";
+            var s = $"{request.pathedUrl} - {request.method} - {request.type} - {statusCode} - {DateTime.Now.ToString()}\r\n{request.data}";
             _logs.Enqueue(s);
             Console.WriteLine(s);
         }

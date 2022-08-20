@@ -41,7 +41,7 @@ namespace MagiCache
                 }
                 response_stream.Write(res_body);
 
-                Logger.Log(apiReq, response.StatusCode);
+                Logger.Log(apiReq, response.StatusCode, res_body);
             }
             catch (JsonException e)
             {
@@ -73,7 +73,7 @@ namespace MagiCache
                 case "GET":
                     if (request.Url.AbsolutePath == "/logs")
                     {
-                        response_stream.Write(String.Join("\r\n", Logger.GetLog()));
+                        response_stream.Write(String.Join("\r\n\r\n", Logger.GetLog()));
                     }
                     break;
 
