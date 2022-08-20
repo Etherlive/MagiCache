@@ -5,6 +5,7 @@ using System.IO;
 using System.Text.Json;
 using System.Net;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace MagiCache
 {
@@ -81,10 +82,19 @@ namespace MagiCache
             response.Close();
         }
 
-        public static void Init(int port = 8080)
+        public static void Init()
         {
             httpListener = new HttpListener();
-            httpListener.Prefixes.Add("http://localhost:" + port + "/");
+
+            if (Debugger.IsAttached)
+            {
+                httpListener.Prefixes.Add("http://localhost:8080/");
+            }
+            else
+            {
+                httpListener.Prefixes.Add("http://+:80/");
+            }
+
             httpListener.Start();
             httpListener.BeginGetContext(ReqStart, null);
         }
