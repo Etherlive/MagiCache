@@ -13,7 +13,7 @@ namespace MagiCache
         private static ConcurrentDictionary<string, CachedRequest> _cache = new ConcurrentDictionary<string, CachedRequest>();
         private static double cacheForMinutes = 5;
 
-        private static string[] passthroughUrls = new string[] { "save", "check_websocket_running", "check" };
+        private static string[] passthroughUrls = new string[] { "save", "check_websocket_running", "check", "delete", "duplicate" };
 
         #endregion Fields
 
